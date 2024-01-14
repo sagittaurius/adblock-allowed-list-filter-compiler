@@ -1,7 +1,7 @@
 # Title: Ghostnetic's Blocklist
 # Description: Python script that generates adblock filters by combining blocklists, host files, and domain lists.
-# Last Modified: 2024-01-13 07:12:36 
-# Domain Count: 13635
+# Last Modified: 2024-01-14 19:33:28 
+# Domain Count: 13636
 # Duplicates Removed: 4464
 # Domains Compressed: 0
 #==================================================================
@@ -8642,6 +8642,7 @@
 ||r-volksbank.de^
 ||r.bing.com^
 ||r.browser.miui.com^
+||r.l5.ca^
 ||r.mail.ru^
 ||r.sascdn.com^
 ||r.sg.sec.miui.com^
