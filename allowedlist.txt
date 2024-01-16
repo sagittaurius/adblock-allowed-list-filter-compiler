@@ -1,7 +1,7 @@
 # Title: Ghostnetic's Blocklist
 # Description: Python script that generates adblock filters by combining blocklists, host files, and domain lists.
-# Last Modified: 2024-01-14 19:33:28 
-# Domain Count: 13636
+# Last Modified: 2024-01-16 19:33:55 
+# Domain Count: 13638
 # Duplicates Removed: 4464
 # Domains Compressed: 0
 #==================================================================
@@ -2122,6 +2122,7 @@
 ||cam.ac.uk^
 ||camera.it^
 ||camera.lei001.com^
+||cameraprive.com^
 ||campaign-archive1.com^
 ||campaign-archive2.com^
 ||campaignmanager.netdirector.co.uk^
@@ -11139,6 +11140,7 @@
 ||tracker.coppersurfer.tk^
 ||tracker.corpscorp.online^
 ||tracker.crawfish.cf^
+||tracker.cubicview.site^
 ||tracker.cubonegro.lol^
 ||tracker.cubonegro.xyz^
 ||tracker.cyber-hub.net^
