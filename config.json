@@ -1,6 +1,6 @@
 {
     "blocklist_urls": [
-        "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt",
+"https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt",
 "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt",
 "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/optional-list.txt",
 "https://raw.githubusercontent.com/freekers/whitelist/master/domains/whitelist.txt",
@@ -28,6 +28,7 @@
 "https://raw.githubusercontent.com/fabriziosalmi/blacklists/latest/whitelist.txt",
 "https://local.oisd.nl/extract/commonly_whitelisted.php",
 "https://raw.githubusercontent.com/TogoFire-Home/AD-Settings/main/Filters/whitelist.txt" ,       
-"https://raw.githubusercontent.com/DandelionSprout/AdGuard-Home-Whitelist/master/whitelist.txt"        
+"https://raw.githubusercontent.com/DandelionSprout/AdGuard-Home-Whitelist/master/whitelist.txt" ,
+"https://raw.githubusercontent.com/DandelionSprout/AdGuard-Home-Whitelist/master/whitelist.txt"
     ]
 }
