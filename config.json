@@ -1,0 +1,5 @@
+{
+    "blocklist_urls": [
+      "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/domains/light.txt"
+        ]
+}
