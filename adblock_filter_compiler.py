@@ -99,24 +99,15 @@ def process_allowlist(filter_content, allowlist_domains):
 
 def main():
     # Main function to fetch blocklists and generate a combined filter.
-    blocklist_urls = [
-        "https://hostfiles.frogeye.fr/firstparty-only-trackers.txt",
-        "https://hblock.molinero.dev/hosts_adblock.txt",
-        "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt",
-        "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-domains.txt",
-        "https://raw.githubusercontent.com/neodevpro/neodevhost/master/adblocker",
-        "https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Formats/GoodbyeAds-AdBlock-Filter.txt",        
-        "https://raw.githubusercontent.com/sjhgvr/oisd/main/domainswild2_big.txt",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif-onlydomains.txt",
-        "https://raw.githubusercontent.com/AdroitAdorKhan/antipopads-re/master/formats/filter.txt",
-        "https://raw.githubusercontent.com/bongochong/CombinedPrivacyBlockLists/master/NoFormatting/cpbl-ctld.txt"
-    ]
-    allowlist_urls = ["https://raw.githubusercontent.com/nextdns/click-tracking-domains/main/domains"]
+with open('config.json') as f:
+        config = json.load(f)
+
+    blocklist_urls = config['blocklist_urls']
+    allowlist_domains = config['allowlist_urls']
 
     filter_content = [requests.get(url).text for url in blocklist_urls]
 
-    allowlist_domains = requests.get(allowlist_urls[0]).text.split('\n')
+    allowlist_domains = [requests.get(url).text for url in allowlist_urls]
 
     filtered_content = process_allowlist(filter_content, allowlist_domains)
     filtered_content, _, _, _ = generate_filter_content(filtered_content)
