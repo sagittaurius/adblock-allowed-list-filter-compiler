@@ -1,5 +1,6 @@
 import re
 import requests
+import json
 from datetime import datetime
 
 # Pre-compiled regular expression for performance
