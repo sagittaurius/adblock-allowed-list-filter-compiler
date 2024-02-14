@@ -1,28 +1,18 @@
 import re
 import requests
 from datetime import datetime
-from typing import List, Set, Tuple
 
+# Pre-compiled regular expression for performance
+domain_regex = re.compile(
+    r"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$"
+)
 
-def is_valid_domain_name(domain: str) -> bool:
-    """Checks if a string is a valid domain name."""
-    domain_regex = re.compile(
-        r"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$"
-    )
+def is_valid_domain(domain):
+    """Checks if a string is a valid domain."""
     return bool(domain_regex.match(domain))
 
-
-def filter_content_by_allowlist(filter_content: List[str], allowlist_domains: Set[str]) -> List[str]:
-    """Removes allowed domains from the filter_content."""
-    filtered_content = [
-        '\n'.join(set(parse_filter_content(content)) - allowlist_domains)
-        for content in filter_content
-    ]
-    return filtered_content
-
-
-def parse_filter_content(content: str) -> Set[str]:
-    """Parses a filter content into AdBlock rules."""
+def parse_hosts_file(content):
+    """Parses a host file content into AdBlock rules."""
     adblock_rules = set()
 
     for line in content.split('\n'):
@@ -38,25 +28,24 @@ def parse_filter_content(content: str) -> Set[str]:
         else:
             parts = line.split()
             domain = parts[-1]
-            if is_valid_domain_name(domain):
+            if is_valid_domain(domain):
                 adblock_rules.add(f'||{domain}^')
 
     return adblock_rules
 
-
-def generate_combined_filter(filter_content: List[str]) -> Tuple[str, int, int, int]:
-    """Generates combined filter content by eliminating duplicates and redundant rules."""
+def generate_filter(file_contents):
+    """Generates filter content from file_contents by eliminating duplicates and redundant rules."""
     adblock_rules_set = set()
     base_domain_set = set()
     duplicates_removed = 0
     redundant_rules_removed = 0
-    allowed_domains = 0
 
-    for content in filter_content:
-        adblock_rules = parse_filter_content(content)
+    for content in file_contents:
+        adblock_rules = parse_hosts_file(content)
         for rule in adblock_rules:
             domain = rule[2:-1]  # Remove '||' and '^'
-            base_domain = '.'.join(domain.split('.')[-3:])  # Get the base domain (last two parts)
+            base_domain = domain.split('.')[-3:]  # Get the base domain (last two parts)
+            base_domain = '.'.join(base_domain)
             if rule not in adblock_rules_set and base_domain not in base_domain_set:
                 adblock_rules_set.add(rule)
                 base_domain_set.add(base_domain)
@@ -65,15 +54,12 @@ def generate_combined_filter(filter_content: List[str]) -> Tuple[str, int, int, 
                     duplicates_removed += 1
                 else:
                     redundant_rules_removed += 1
-                if rule in adblock_rules:
-                    allowed_domains += 1
 
     sorted_rules = sorted(adblock_rules_set)
-    header = generate_filter_header(len(sorted_rules), duplicates_removed, redundant_rules_removed, allowed_domains)
-    return '\n'.join([header, '', *sorted_rules]), duplicates_removed, redundant_rules_removed, allowed_domains
+    header = generate_header(len(sorted_rules), duplicates_removed, redundant_rules_removed)
+    return '\n'.join([header, '', *sorted_rules]), duplicates_removed, redundant_rules_removed
 
-
-def generate_filter_header(domain_count: int, duplicates_removed: int, redundant_rules_removed: int, allowed_domains: int) -> str:
+def generate_header(domain_count, duplicates_removed, redundant_rules_removed):
     """Generates header with specific domain count, removed duplicates, and compressed domains information."""
     date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S %Z')  # Includes date, time, and timezone
     return f"""# Title: sagittaurius's Blocklist
@@ -83,15 +69,7 @@ def generate_filter_header(domain_count: int, duplicates_removed: int, redundant
 # Domain Count: {domain_count}
 # Duplicates Removed: {duplicates_removed}
 # Domains Compressed: {redundant_rules_removed}
-# Allowed Domain: {allowed_domains}
 #=================================================================="""
-
-
-def process_filter_content(filter_content: List[str], allowlist_domains: List[str]) -> List[str]:
-    """Processes the allowed domains before filtering the content."""
-    filtered_content = filter_content_by_allowlist(filter_content, set(allowlist_domains))
-    return filtered_content
-
 
 def generate_blocklist():
     """Main function to fetch blocklists and generate a combined filter."""
@@ -121,17 +99,29 @@ def generate_blocklist():
     ]
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
 
-    # Remove '||' and '^' from allowedlist_urls and blocklist_urls first
-    allowlist_domains = [re.sub(r'\|\||\^', '', domain) for domain in requests.get(allowlist_urls[0]).text.split('\n')]
-    blocklist_content = [re.sub(r'\|\||\^', '', requests.get(url).text) for url in blocklist_urls]
+    # Fetch allowlist domains
+    allowlist_domains = set()
+    for url in allowlist_urls:
+        response = requests.get(url)
+        if response.status_code == 200:
+            allowlist_domains.update(response.text.split('\n'))
 
-    filtered_content = process_filter_content(blocklist_content, allowlist_domains)
-    filtered_content, _, _, _ = generate_combined_filter(filtered_content)
+    # Fetch blocklist domains
+    blocklist_domains = set()
+    for url in blocklist_urls:
+        response = requests.get(url)
+        if response.status_code == 200:
+            blocklist_domains.update(response.text.split('\n'))
+
+    # Remove domains in blocklist_urls from allowlist_domains
+    allowlist_domains -= blocklist_domains
+
+    # Generate filter content
+    filter_content, duplicates_removed, redundant_rules_removed = generate_filter([response.text for response in blocklist_domains])
 
     # Write the filter content to a file
     with open('blocklist.txt', 'w') as f:
-        f.write(filtered_content)
-
+        f.write(filter_content)
 
 if __name__ == "__main__":
     generate_blocklist()
