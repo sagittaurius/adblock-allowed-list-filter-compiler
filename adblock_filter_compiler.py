@@ -23,6 +23,23 @@ def parse_hosts_file(content):
         if not line or line[0] in ('#', '!'):
             continue
 
+def remove_allowlist(file_contents, allowlist_domains):
+    """Removes allowed domains from the file_contents."""
+    filtered_contents = []
+
+    for content in file_contents:
+        adblock_rules = parse_hosts_file(content)
+        filtered_rules = set()
+
+        for rule in adblock_rules:
+            domain = rule[2:-1]  # Remove '||' and '^'
+            if domain not in allowlist_domains:
+                filtered_rules.add(rule)
+
+        filtered_contents.append('\n'.join(filtered_rules))
+
+    return filtered_contents
+
         # Check if line follows AdBlock syntax, else create new rule
         if line.startswith('||') and line.endswith('^'):
             adblock_rules.add(line)
@@ -33,6 +50,7 @@ def parse_hosts_file(content):
                 adblock_rules.add(f'||{domain}^')
 
     return adblock_rules
+
 
 def generate_filter(filtered_contents):
     """Generates filter content from file_contents by eliminating duplicates and redundant rules."""
@@ -74,22 +92,6 @@ def generate_header(domain_count, duplicates_removed, redundant_rules_removed):
 
 
 
-def remove_allowlist(file_contents, allowlist_domains):
-    """Removes allowed domains from the file_contents."""
-    filtered_contents = []
-
-    for content in file_contents:
-        adblock_rules = parse_hosts_file(content)
-        filtered_rules = set()
-
-        for rule in adblock_rules:
-            domain = rule[2:-1]  # Remove '||' and '^'
-            if domain not in allowlist_domains:
-                filtered_rules.add(rule)
-
-        filtered_contents.append('\n'.join(filtered_rules))
-
-    return filtered_contents
 
 def main():
     """Main function to fetch blocklists, allowlists, and generate a combined filter."""
