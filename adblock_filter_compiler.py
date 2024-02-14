@@ -51,12 +51,14 @@ def parse_hosts_file(content):
 
     return adblock_rules
 
-def generate_filter(filter_content):
+def generate_filter_content(filter_content):
     """Generates filter content from filter_content by eliminating duplicates and redundant rules."""
+    filtered_rules = set()
     adblock_rules_set = set()
     base_domain_set = set()
     duplicates_removed = 0
     redundant_rules_removed = 0
+    allowed_domains = 0
 
     for content in filter_content:
         adblock_rules = parse_hosts_file(content)
@@ -71,12 +73,14 @@ def generate_filter(filter_content):
                     duplicates_removed += 1
                 else:
                     redundant_rules_removed += 1
+                else: 
+                    allowed_domains += 1
 
     sorted_rules = sorted(adblock_rules_set)
-    header = generate_header(len(sorted_rules), duplicates_removed, redundant_rules_removed)
-    return '\n'.join([header, '', *sorted_rules]), duplicates_removed, redundant_rules_removed
+    header = generate_header(len(sorted_rules), duplicates_removed, redundant_rules_removed, allowed_domains)
+    return '\n'.join([header, '', *sorted_rules]), duplicates_removed, redundant_rules_removed, allowed_domains
 
-def generate_header(domain_count, duplicates_removed, redundant_rules_removed):
+def generate_header(domain_count, duplicates_removed, redundant_rules_removed, allowed_domains):
     """Generates header with specific domain count, removed duplicates, and compressed domains information."""
     date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S %Z')  # Includes date, time, and timezone
     return f"""# Title: sagittaurius's Blocklist
@@ -86,19 +90,35 @@ def generate_header(domain_count, duplicates_removed, redundant_rules_removed):
 # Domain Count: {domain_count}
 # Duplicates Removed: {duplicates_removed}
 # Domains Compressed: {redundant_rules_removed}
+# Allowed Domain: {allowed_domains}
 #=================================================================="""
+
+def process_allowlist(filter_content, allowlist_domains):
+    """Processes the allowed domains before filtering the content."""
+    filtered_content = remove_allowlist(filter_content, allowlist_domains)
+    return filtered_content
 
 def main():
     """Main function to fetch blocklists and generate a combined filter."""
-    with open('config.json') as f:
-        config = json.load(f)
-
-    blocklist_urls = config['blocklist_urls']
-    allowlist_urls = config['allowlist_urls']
+blocklist_urls: [
+        "https://hostfiles.frogeye.fr/firstparty-only-trackers.txt",
+        "https://hblock.molinero.dev/hosts_adblock.txt",
+        "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt",
+        "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-domains.txt",
+        "https://raw.githubusercontent.com/neodevpro/neodevhost/master/adblocker",
+        "https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Formats/GoodbyeAds-AdBlock-Filter.txt",        
+        "https://raw.githubusercontent.com/sjhgvr/oisd/main/domainswild2_big.txt",
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt",
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif-onlydomains.txt",
+        "https://raw.githubusercontent.com/AdroitAdorKhan/antipopads-re/master/formats/filter.txt",
+        "https://raw.githubusercontent.com/bongochong/CombinedPrivacyBlockLists/master/NoFormatting/cpbl-ctld.txt"
+    ]
+    allowlist_urls:["https://raw.githubusercontent.com/nextdns/click-tracking-domains/main/domains"]
     
     filter_content = [requests.get(url).text for url in blocklist_urls]
 
-    filtered_content, _, _ = generate_filter(filter_content)
+    filtered_content = process_allowlist(filter_content, allowlist_domains)
+    filtered_content, _, _, _ = generate_filter_content(filtered_content)
 
     # Write the filter content to a file
     with open('blocklist.txt', 'w') as f:
