@@ -13,8 +13,9 @@ def is_valid_domain(domain):
 
 def parse_hosts_file(content):
     """Parses a host file content into AdBlock rules."""
+    allowlist_domains = set()
+    blocklist_domains = set()
     adblock_rules = set()
-
     for line in content.split("\n"):
         line = line.strip()
 
@@ -24,14 +25,17 @@ def parse_hosts_file(content):
 
         # Check if line follows AdBlock syntax, else create new rule
         if line.startswith("||") and line.endswith("^"):
+            allowlist_domains.add(line)
+            blocklist_domains.add(line)
             adblock_rules.add(line)
         else:
             parts = line.split()
             domain = parts[-1]
             if is_valid_domain(domain):
-                adblock_rules.add(f"||{domain}^")
-
-    return adblock_rules
+                allowlist_domains.add(f"||{domain}^")
+                blocklist_domains.add(f"||{domain}^")
+                adblock_rules.add(f'||{domain}^')
+    return allowlist_domains, blocklist_domains,adblock_rules
 
 
 def generate_filter(file_contents):
@@ -101,28 +105,20 @@ def generate_blocklist():
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
 
     # Fetch allowlist domains
-    allowlist_domains = set()
-    for url in allowlist_urls:
-        response = requests.get(url)
-        if response.status_code == 200:
-            allowlist_domains.update(response.text.split("\n"))
-
+allowlist_domains = [requests.get(url).text for url in allowlist_urls]
     # Fetch blocklist domains
-    blocklist_domains = set()
-    for url in blocklist_urls:
-        response = requests.get(url)
-        if response.status_code == 200:
-            blocklist_domains.update(response.text.split("\n"))
+blocklist_domains = [requests.get(url).text for url in blocklist_urls]
 
-    # Calculate the difference between blocklist and allowlist domains
-    file_contents = blocklist_domains - allowlist_domains
-
-    # Generate the filter content
-    filter_content, _, _ = generate_filter(file_contents)
 
     # Write the filter content to a file
     with open("blocklist.txt", "w") as f:
-        f.write(filter_content)
+        f.write(filtered_content)
+
+
+file_contents = blocklist_domains - allowlist_domains
+
+
+filter_content, _, _ = generate_filter(file_contents)
 
 
 if __name__ == "__main__":
