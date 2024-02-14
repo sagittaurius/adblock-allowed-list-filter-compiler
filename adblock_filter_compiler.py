@@ -121,10 +121,11 @@ def generate_blocklist():
     ]
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
 
-    filter_content = [requests.get(url).text for url in blocklist_urls]
-    allowlist_domains = requests.get(allowlist_urls[0]).text.split('\n')
+    # Remove '||' and '^' from allowedlist_urls and blocklist_urls first
+    allowlist_domains = [re.sub(r'\|\||\^', '', domain) for domain in requests.get(allowlist_urls[0]).text.split('\n')]
+    blocklist_content = [re.sub(r'\|\||\^', '', requests.get(url).text) for url in blocklist_urls]
 
-    filtered_content = process_filter_content(filter_content, allowlist_domains)
+    filtered_content = process_filter_content(blocklist_content, allowlist_domains)
     filtered_content, _, _, _ = generate_combined_filter(filtered_content)
 
     # Write the filter content to a file
