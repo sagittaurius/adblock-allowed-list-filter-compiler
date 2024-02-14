@@ -1,6 +1,5 @@
 import re
 import requests
-import json
 from datetime import datetime
 from typing import List, Set, Tuple
 
@@ -11,6 +10,7 @@ def is_valid_domain_name(domain: str) -> bool:
         r"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$"
     )
     return bool(domain_regex.match(domain))
+
 
 def filter_content_by_allowlist(filter_content: List[str], allowlist_domains: Set[str]) -> List[str]:
     """Removes allowed domains from the filter_content."""
@@ -95,7 +95,7 @@ def process_filter_content(filter_content: List[str], allowlist_domains: List[st
 
 def generate_blocklist():
     """Main function to fetch blocklists and generate a combined filter."""
-  blocklist_urls = [
+    blocklist_urls = [
         "https://hostfiles.frogeye.fr/firstparty-only-trackers.txt",
         "https://hblock.molinero.dev/hosts_adblock.txt",
         "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt",
@@ -108,7 +108,7 @@ def generate_blocklist():
         "https://raw.githubusercontent.com/AdroitAdorKhan/antipopads-re/master/formats/filter.txt",
         "https://raw.githubusercontent.com/bongochong/CombinedPrivacyBlockLists/master/NoFormatting/cpbl-ctld.txt"
     ]
-   allowlist_urls = ["https://raw.githubusercontent.com/nextdns/click-tracking-domains/main/domains"]
+    allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
 
     filter_content = [requests.get(url).text for url in blocklist_urls]
     allowlist_domains = requests.get(allowlist_urls[0]).text.split('\n')
