@@ -104,10 +104,9 @@ with open('config.json') as f:
         config = json.load(f)
 
     blocklist_urls = config['blocklist_urls']
-    allowlist_domains = config['allowlist_urls']
+    allowlist_urls = config['allowlist_urls']
 
     filter_content = [requests.get(url).text for url in blocklist_urls]
-
     allowlist_domains = [requests.get(url).text for url in allowlist_urls]
 
     filtered_content = process_allowlist(filter_content, allowlist_domains)
