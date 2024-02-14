@@ -96,16 +96,25 @@ def process_filter_content(filter_content: List[str], allowlist_domains: List[st
 def generate_blocklist():
     """Main function to fetch blocklists and generate a combined filter."""
     blocklist_urls = [
+        "https://v.firebog.net/hosts/Prigent-Crypto.txt",
+        "https://v.firebog.net/hosts/Prigent-Malware.txt",
         "https://hostfiles.frogeye.fr/firstparty-only-trackers.txt",
         "https://hblock.molinero.dev/hosts_adblock.txt",
+        "https://gitlab.com/quidsup/notrack-blocklists/-/raw/master/trackers.hosts",
+        "https://raw.githubusercontent.com/durablenapkin/scamblocklist/master/hosts.txt",
         "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt",
         "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-domains.txt",
         "https://raw.githubusercontent.com/neodevpro/neodevhost/master/adblocker",
-        "https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Formats/GoodbyeAds-AdBlock-Filter.txt",        
         "https://raw.githubusercontent.com/sjhgvr/oisd/main/domainswild2_big.txt",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif-onlydomains.txt",
-        "https://raw.githubusercontent.com/AdroitAdorKhan/antipopads-re/master/formats/filter.txt",
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt",
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt",
+        "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware",
+        "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Scam",
+        "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Tracking",
+        "https://raw.githubusercontent.com/mitchellkrogza/Ultimate.Hosts.Blacklist/master/domains/domains2.list",
+        "https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt",
+        "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/malware",
+        "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/Phishing-Angriffe",
         "https://raw.githubusercontent.com/bongochong/CombinedPrivacyBlockLists/master/NoFormatting/cpbl-ctld.txt"
     ]
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
