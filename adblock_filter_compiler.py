@@ -74,7 +74,6 @@ def generate_header(domain_count, duplicates_removed, redundant_rules_removed):
 
 
 def generate_blocklist():
-    """Main function to fetch blocklists and generate a combined filter."""
     blocklist_urls = [
         "https://v.firebog.net/hosts/Prigent-Crypto.txt",
         "https://v.firebog.net/hosts/Prigent-Malware.txt",
@@ -102,42 +101,28 @@ def generate_blocklist():
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
 
     # Fetch allowlist domains
-    allowlist_domains = fetch_domains(allowlist_urls)
+    allowlist_domains = set()
+    for url in allowlist_urls:
+        response = requests.get(url)
+        if response.status_code == 200:
+            allowlist_domains.update(response.text.split("\n"))
 
     # Fetch blocklist domains
-    blocklist_domains = fetch_domains(blocklist_urls)
+    blocklist_domains = set()
+    for url in blocklist_urls:
+        response = requests.get(url)
+        if response.status_code == 200:
+            blocklist_domains.update(response.text.split("\n"))
 
-    # Filter domains
-    filtered_domains = filter_domains(blocklist_domains, allowlist_domains)
+    # Calculate the difference between blocklist and allowlist domains
+    file_contents = blocklist_domains - allowlist_domains
 
-    # Generate filter content
-    filtered_content, duplicates_removed, redundant_rules_removed = generate_filter(filtered_domains)
+    # Generate the filter content
+    filter_content, _, _ = generate_filter(file_contents)
 
     # Write the filter content to a file
     with open("blocklist.txt", "w") as f:
-        f.write(filtered_content)
-
-
-def fetch_domains(urls):
-    domains = set()
-    for url in urls:
-        response = requests.get(url)
-        if response.status_code == 200:
-            lines = response.text.split("\n")
-            for line in lines:
-                if line.startswith("||") and line.endswith("^"):
-                    domains.add(line)
-                else:
-                    parts = line.split()
-                    domain = parts[-1]
-                    if is_valid_domain(domain):
-                        domains.add(f"||{domain}^")
-    return domains
-
-
-def filter_domains(blocklist_domains, allowlist_domains):
-    filtered_domains = blocklist_domains - allowlist_domains
-    return filtered_domains
+        f.write(filter_content)
 
 
 if __name__ == "__main__":
