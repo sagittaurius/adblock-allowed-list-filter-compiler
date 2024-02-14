@@ -112,7 +112,7 @@ def main():
     allowlist_urls = config['allowlist_urls']
 
     filter_content = [requests.get(url).text for url in blocklist_urls]
-    allowlist_domains = [requests.get(url).text for url in allowlist_urls]
+    allowlist_domains = requests.get(allowlist_urls[0]).text.split('\n')
 
     filtered_content = process_allowlist(filter_content, allowlist_domains)
     filtered_content, _, _, _ = generate_filter_content(filtered_content)
