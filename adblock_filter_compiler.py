@@ -45,7 +45,7 @@ def generate_filter(file_contents):
         adblock_rules = parse_hosts_file(content)
         for rule in adblock_rules:
             domain = rule[2:-1]  # Remove '||' and '^'
-            base_domain = domain.split('.')[-10:]  # Get the base domain (last two parts)
+            base_domain = domain.split('.')[-3:]  # Get the base domain (last two parts)
             base_domain = '.'.join(base_domain)
             if rule not in adblock_rules_set and base_domain not in base_domain_set:
                 adblock_rules_set.add(rule)
@@ -63,27 +63,52 @@ def generate_filter(file_contents):
 def generate_header(domain_count, duplicates_removed, redundant_rules_removed):
     """Generates header with specific domain count, removed duplicates, and compressed domains information."""
     date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S %Z')  # Includes date, time, and timezone
-    return f"""# Title: Ghostnetic's Blocklist
+    return f"""# Title: sagittaurius's Blocklist
 # Description: Python script that generates adblock filters by combining blocklists, host files, and domain lists.
 # Last Modified: {date_time}
+# Expires: 1 day
 # Domain Count: {domain_count}
 # Duplicates Removed: {duplicates_removed}
 # Domains Compressed: {redundant_rules_removed}
 #=================================================================="""
 
+
+
+def remove_allowlist(file_contents, allowlist_domains):
+    """Removes allowed domains from the file_contents."""
+    filtered_contents = []
+
+    for content in file_contents:
+        adblock_rules = parse_hosts_file(content)
+        filtered_rules = set()
+
+        for rule in adblock_rules:
+            domain = rule[2:-1]  # Remove '||' and '^'
+            if domain not in allowlist_domains:
+                filtered_rules.add(rule)
+
+        filtered_contents.append('\n'.join(filtered_rules))
+
+    return filtered_contents
+
 def main():
-    """Main function to fetch blocklists and generate a combined filter."""
+    """Main function to fetch blocklists, allowlists, and generate a combined filter."""
     with open('config.json') as f:
         config = json.load(f)
 
     blocklist_urls = config['blocklist_urls']
-    file_contents = [requests.get(url).text for url in blocklist_urls]
+    allowlist_urls = config['allowlist_urls']
+    allowlist_domains = set()
 
-    filter_content, _, _ = generate_filter(file_contents)
+    for url in allowlist_urls:
+        allowlist_content = requests.get(url).text
+        allowlist_domains.update(parse_hosts_file(allowlist_content))
+
+    file_contents = [requests.get(url).text for url in blocklist_urls]
+    filtered_contents = remove_allowlist(file_contents, allowlist_domains)
+
+    filter_content, _, _ = generate_filter(filtered_contents)
 
     # Write the filter content to a file
-    with open('allowedlist.txt', 'w') as f:
+    with open('blocklist.txt', 'w') as f:
         f.write(filter_content)
-
-if __name__ == "__main__":
-    main()
