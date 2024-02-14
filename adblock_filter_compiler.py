@@ -23,6 +23,18 @@ def parse_hosts_file(content):
         if not line or line[0] in ('#', '!'):
             continue
 
+        # Check if line follows AdBlock syntax, else create new rule
+        if line.startswith('||') and line.endswith('^'):
+            adblock_rules.add(line)
+        else:
+            parts = line.split()
+            domain = parts[-1]
+            if is_valid_domain(domain):
+                adblock_rules.add(f'||{domain}^')
+
+    return adblock_rules
+
+
 def remove_allowlist(file_contents, allowlist_domains):
     """Removes allowed domains from the file_contents."""
     filtered_contents = []
@@ -39,17 +51,6 @@ def remove_allowlist(file_contents, allowlist_domains):
         filtered_contents.append('\n'.join(filtered_rules))
 
     return filtered_contents
-
-        # Check if line follows AdBlock syntax, else create new rule
-        if line.startswith('||') and line.endswith('^'):
-            adblock_rules.add(line)
-        else:
-            parts = line.split()
-            domain = parts[-1]
-            if is_valid_domain(domain):
-                adblock_rules.add(f'||{domain}^')
-
-    return adblock_rules
 
 
 def generate_filter(filtered_contents):
@@ -78,6 +79,7 @@ def generate_filter(filtered_contents):
     header = generate_header(len(sorted_rules), duplicates_removed, redundant_rules_removed)
     return '\n'.join([header, '', *sorted_rules]), duplicates_removed, redundant_rules_removed
 
+
 def generate_header(domain_count, duplicates_removed, redundant_rules_removed):
     """Generates header with specific domain count, removed duplicates, and compressed domains information."""
     date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S %Z')  # Includes date, time, and timezone
@@ -89,8 +91,6 @@ def generate_header(domain_count, duplicates_removed, redundant_rules_removed):
 # Duplicates Removed: {duplicates_removed}
 # Domains Compressed: {redundant_rules_removed}
 #=================================================================="""
-
-
 
 
 def main():
