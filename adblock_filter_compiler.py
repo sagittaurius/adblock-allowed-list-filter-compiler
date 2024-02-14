@@ -44,8 +44,7 @@ def generate_filter(file_contents):
         adblock_rules = parse_hosts_file(content)
         for rule in adblock_rules:
             domain = rule[2:-1]  # Remove '||' and '^'
-            base_domain = domain.split('.')[-3:]  # Get the base domain (last two parts)
-            base_domain = '.'.join(base_domain)
+            base_domain = '.'.join(domain.split('.')[-3:])  # Get the base domain (last two parts)
             if rule not in adblock_rules_set and base_domain not in base_domain_set:
                 adblock_rules_set.add(rule)
                 base_domain_set.add(base_domain)
