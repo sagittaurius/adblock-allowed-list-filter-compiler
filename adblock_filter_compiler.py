@@ -3,14 +3,14 @@ import requests
 import json
 from datetime import datetime
 
-# Pre-compiled regular expression for performance
-domain_regex = re.compile(
-    r"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$"
-)
 
 def is_valid_domain(domain):
     """Checks if a string is a valid domain."""
+    domain_regex = re.compile(
+        r"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$"
+    )
     return bool(domain_regex.match(domain))
+
 
 def remove_allowlist(filter_content, allowlist_domains):
     """Removes allowed domains from the filter_content."""
@@ -28,6 +28,7 @@ def remove_allowlist(filter_content, allowlist_domains):
         filtered_content.append('\n'.join(filtered_rules))
 
     return filtered_content
+
 
 def parse_hosts_file(content):
     """Parses a host file content into AdBlock rules."""
@@ -50,6 +51,7 @@ def parse_hosts_file(content):
                 adblock_rules.add(f'||{domain}^')
 
     return adblock_rules
+
 
 def generate_filter_content(filter_content):
     """Generates filter content from filter_content by eliminating duplicates and redundant rules."""
@@ -80,6 +82,7 @@ def generate_filter_content(filter_content):
     header = generate_header(len(sorted_rules), duplicates_removed, redundant_rules_removed, allowed_domains)
     return '\n'.join([header, '', *sorted_rules]), duplicates_removed, redundant_rules_removed, allowed_domains
 
+
 def generate_header(domain_count, duplicates_removed, redundant_rules_removed, allowed_domains):
     """Generates header with specific domain count, removed duplicates, and compressed domains information."""
     date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S %Z')  # Includes date, time, and timezone
@@ -93,14 +96,16 @@ def generate_header(domain_count, duplicates_removed, redundant_rules_removed, a
 # Allowed Domain: {allowed_domains}
 #=================================================================="""
 
+
 def process_allowlist(filter_content, allowlist_domains):
     """Processes the allowed domains before filtering the content."""
     filtered_content = remove_allowlist(filter_content, allowlist_domains)
     return filtered_content
 
+
 def main():
     # Main function to fetch blocklists and generate a combined filter.
-with open('config.json') as f:
+    with open('config.json') as f:
         config = json.load(f)
 
     blocklist_urls = config['blocklist_urls']
@@ -115,6 +120,7 @@ with open('config.json') as f:
     # Write the filter content to a file
     with open('blocklist.txt', 'w') as f:
         f.write(filtered_content)
+
 
 if __name__ == "__main__":
     main()
