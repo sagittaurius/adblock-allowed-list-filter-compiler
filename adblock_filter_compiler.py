@@ -73,7 +73,7 @@ def generate_filter_content(filter_content):
                     duplicates_removed += 1
                 else:
                     redundant_rules_removed += 1
-                if rule not in filtered_rules and base_domain not in base_domain_set:
+                if rule in filtered_rules:
                     allowed_domains += 1
 
     sorted_rules = sorted(adblock_rules_set)
