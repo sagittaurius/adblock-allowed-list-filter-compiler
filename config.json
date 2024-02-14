@@ -12,4 +12,5 @@
         "https://raw.githubusercontent.com/AdroitAdorKhan/antipopads-re/master/formats/filter.txt",
         "https://raw.githubusercontent.com/bongochong/CombinedPrivacyBlockLists/master/NoFormatting/cpbl-ctld.txt"
     ]
+    "allowlist_urls":[]
 }
