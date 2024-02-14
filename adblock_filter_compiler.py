@@ -34,14 +34,14 @@ def parse_hosts_file(content):
 
     return adblock_rules
 
-def generate_filter(file_contents):
+def generate_filter(filtered_contents):
     """Generates filter content from file_contents by eliminating duplicates and redundant rules."""
     adblock_rules_set = set()
     base_domain_set = set()
     duplicates_removed = 0
     redundant_rules_removed = 0
 
-    for content in file_contents:
+    for content in filtered_contents:
         adblock_rules = parse_hosts_file(content)
         for rule in adblock_rules:
             domain = rule[2:-1]  # Remove '||' and '^'
@@ -112,3 +112,7 @@ def main():
     # Write the filter content to a file
     with open('blocklist.txt', 'w') as f:
         f.write(filter_content)
+
+
+if __name__ == "__main__":
+    main()
