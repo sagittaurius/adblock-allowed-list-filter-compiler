@@ -1,0 +1,34 @@
+name: AdBlock Mobile Filter Compiler
+
+on:
+  schedule:
+    - cron: '0 18 * * *' # Runs every day at 1 PM EST (6 PM UTC)
+  workflow_dispatch:
+
+jobs:
+  generate_adblock_filters:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run filter generator script
+      run: python adblock_mobile_filter_compiler.py
+
+    - name: Commit and push updated filter list
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add mobile.blocklist.txt
+        git commit -m "Update filter list" || echo "No changes to commit"
+        git push
+    
