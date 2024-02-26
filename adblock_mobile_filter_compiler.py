@@ -84,7 +84,6 @@ def process_filter_content_with_allowlist_domains(filter_content: List[str], all
 def generate_combined_filter_file():
     """Main function to fetch blocklists and generate a combined filter."""
     blocklist_urls = [
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt",
         "https://blocklistproject.github.io/Lists/alt-version/malware-nl.txt",
         "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/malware",
         "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware"
