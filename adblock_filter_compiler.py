@@ -94,7 +94,6 @@ def generate_combined_filter_file():
         "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware",
         "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/malware",
         "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/Phishing-Angriffe",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt",
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt",
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt"
     ]
