@@ -37,6 +37,8 @@ def parse_filter_content(content: str) -> Set[str]:
     return adblock_rules
 
 
+from typing import List, Tuple
+
 def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, int, int, int]:
     """Generates combined filter content by eliminating duplicates and redundant rules."""
     adblock_rules_set = set()
@@ -47,17 +49,42 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
     for content in filter_content:
         adblock_rules = parse_filter_content(content)
         for rule in adblock_rules:
-            domain = rule[2:-1]  # Remove '||' and '^'
-            base_domain = '.'.join(domain.split('.')[-3:])  # Get the base domain (last three parts)
-            shorter_domain = domain if len(domain) > len(base_domain) else base_domain
-            if rule not in adblock_rules_set and shorter_domain not in shorter_domain_set:
+            domain = get_domain(rule)
+            shorter_domain = get_shorter_domain(domain)
+            if is_unique_rule(rule, adblock_rules_set) and is_unique_domain(shorter_domain, shorter_domain_set):
                 adblock_rules_set.add(rule)
                 shorter_domain_set.add(shorter_domain)
             else:
-                if rule in adblock_rules_set:
-                    duplicates_removed += 1
-                else:
-                    redundant_rules_removed += 1
+                update_counters(rule, adblock_rules_set, duplicates_removed, redundant_rules_removed)
+
+    return "", duplicates_removed, redundant_rules_removed, len(adblock_rules_set)
+
+
+def get_domain(rule: str) -> str:
+    """Extracts the domain from the rule."""
+    domain = rule[2:-1]  # Remove '||' and '^'
+    return '.'.join(domain.split('.')[-3:])  # Get the base domain (last three parts)
+
+def get_shorter_domain(domain: str) -> str:
+    """Returns the shorter domain between the full domain and the base domain."""
+    return domain if len(domain) > len(domain.split('.')[-3:]) else '.'.join(domain.split('.')[-3:])
+
+def is_unique_rule(rule: str, rules_set: set) -> bool:
+    """Checks if the rule is unique."""
+    return rule not in rules_set
+
+def is_unique_domain(shorter_domain: str, domain_set: set) -> bool:
+    """Checks if the domain is unique."""
+    return shorter_domain not in domain_set
+
+def update_counters(rule: str, rules_set: set, duplicates_removed: int, redundant_rules_removed: int):
+    """Updates the counters based on the rule status."""
+    if rule in rules_set:
+        duplicates_removed += 1
+    else:
+        redundant_rules_removed += 1
+
+    
 
     sorted_rules = sorted(adblock_rules_set)
     header = generate_filter_header(len(sorted_rules), duplicates_removed, redundant_rules_removed)
