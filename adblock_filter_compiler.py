@@ -23,17 +23,14 @@ def filter_content_by_allowlist_domains(filter_content: List[str], allowlist_dom
 
 def parse_filter_content(content: str) -> Set[str]:
     """Parses a filter content into AdBlock rules."""
+    """Parses a filter content into AdBlock rules."""
     adblock_rules = set()
     for line in content.split('\n'):
         if line.strip() and line[0] not in ('#', '!') and not line.startswith('||www.'):
-            # Check if line follows AdBlock syntax, else create new rule
-            if line.startswith('||') and line.endswith('^'):
-                adblock_rules.add(line)
-            else:
-                parts = line.split()
-                domain = parts[-1]
-                if is_valid_domain_name(domain):
-                    adblock_rules.add(f'||{domain}^')
+            parts = line.split()
+            domain = parts[-1]
+            if is_valid_domain_name(domain):
+                adblock_rules.add(f'||{domain}^')
     return adblock_rules
 
 
@@ -48,7 +45,7 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
         adblock_rules = parse_filter_content(content)
         for rule in adblock_rules:
             domain = rule[2:-1]  # Remove '||' and '^'
-            base_domain = '.'.join(domain.split('.')[-3:])  # Get the base domain (last three parts)
+            base_domain = '.'.join(domain.split('.')[-2:])  # Get the base domain (last three parts)
             if rule not in adblock_rules_set and base_domain not in base_domain_set:
                 adblock_rules_set.add(rule)
                 base_domain_set.add(base_domain)
