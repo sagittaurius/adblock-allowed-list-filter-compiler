@@ -40,7 +40,7 @@ def parse_filter_content(content: str) -> Set[str]:
 def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, int, int, int]:
     """Generates combined filter content by eliminating duplicates and redundant rules."""
     adblock_rules_set = set()
-    shorter_domain_set = set()
+    base_domain_set = set()
     duplicates_removed = 0
     redundant_rules_removed = 0
 
@@ -49,10 +49,10 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
         for rule in adblock_rules:
             domain = rule[2:-1]  # Remove '||' and '^'
             base_domain = '.'.join(domain.split('.')[-3:])  # Get the base domain (last three parts)
-            shorter_domain = domain if len(domain) < len(base_domain) else base_domain
-            if rule not in adblock_rules_set and shorter_domain not in shorter_domain_set:
+            
+            if rule not in adblock_rules_set and base_domain not in base_domain_set:
                 adblock_rules_set.add(rule)
-                shorter_domain_set.add(shorter_domain)
+                base_domain_set.add(base_domain)
             else:
                 if rule in adblock_rules_set:
                     duplicates_removed += 1
