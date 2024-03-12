@@ -52,7 +52,7 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
             shorter_domain = domain if len(domain) < len(base_domain) else base_domain
             if rule not in adblock_rules_set and shorter_domain not in shorter_domain_set:
                 adblock_rules_set.add(rule)
-                base_domain_set.add(shorter_domain)
+                shorter_domain_set.add(shorter_domain)
             else:
                 if rule in adblock_rules_set:
                     duplicates_removed += 1
