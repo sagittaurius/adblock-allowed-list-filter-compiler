@@ -23,11 +23,11 @@ def filter_content_by_allowlist_domains(filter_content: List[str], allowlist_dom
 
 def parse_filter_content(content: str) -> Set[str]:
     """Parses a filter content into AdBlock rules."""
-    """Parses a filter content into AdBlock rules."""
     adblock_rules = set()
     for line in content.split('\n'):
         if line.strip() and line[0] not in ('#', '!') and not line.startswith('||www.'):
             if line in base_domain parts[-1]
+            if line.startswith('||') and line.endswith('^'):
             adblock_rules.add(line)
             else:
             parts = line.split()
