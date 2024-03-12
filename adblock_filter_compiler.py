@@ -51,13 +51,14 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
         for rule in adblock_rules:
             domain = get_domain(rule)
             shorter_domain = get_shorter_domain(domain)
-            if is_unique_rule(rule, adblock_rules_set) and is_unique_domain(shorter_domain, shorter_domain_set):
+            if rule not in adblock_rules_set and shorter_domain not in shorter_domain_set:
                 adblock_rules_set.add(rule)
                 shorter_domain_set.add(shorter_domain)
             else:
-                update_counters(rule, adblock_rules_set, duplicates_removed, redundant_rules_removed)
-
-    return "", duplicates_removed, redundant_rules_removed, len(adblock_rules_set)
+                if rule in adblock_rules_set:
+                    duplicates_removed += 1
+                else:
+                    redundant_rules_removed += 1
 
 
 def get_domain(rule: str) -> str:
