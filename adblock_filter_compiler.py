@@ -85,17 +85,7 @@ def process_filter_content_with_allowlist_domains(filter_content: List[str], all
 def generate_combined_filter_file():
     """Main function to fetch blocklists and generate a combined filter."""
     blocklist_urls = [
-     """   "https://phishing.army/download/phishing_army_blocklist_extended.txt",
-        "https://malware-filter.gitlab.io/malware-filter/phishing-filter.txt",
-        "https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt",
-        "https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt",
-        "https://blocklistproject.github.io/Lists/alt-version/phishing-nl.txt",
-        "https://blocklistproject.github.io/Lists/alt-version/malware-nl.txt", 
-        "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware",
-        "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/malware",
-        "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/Phishing-Angriffe",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt""""
+
         "https://github.com/fabriziosalmi/blacklists/releases/download/latest/blacklist.txt"
     ]
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
@@ -113,3 +103,15 @@ def generate_combined_filter_file():
 
 if __name__ == "__main__":
     generate_combined_filter_file()
+
+     """https://phishing.army/download/phishing_army_blocklist_extended.txt",
+        "https://malware-filter.gitlab.io/malware-filter/phishing-filter.txt",
+        "https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt",
+        "https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt",
+        "https://blocklistproject.github.io/Lists/alt-version/phishing-nl.txt",
+        "https://blocklistproject.github.io/Lists/alt-version/malware-nl.txt", 
+        "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware",
+        "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/malware",
+        "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/Phishing-Angriffe",
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt",
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt"""
