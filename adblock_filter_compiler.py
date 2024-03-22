@@ -88,7 +88,6 @@ def generate_combined_filter_file():
        "https://phishing.army/download/phishing_army_blocklist_extended.txt",
         "https://malware-filter.gitlab.io/malware-filter/phishing-filter.txt",
         "https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt",
-        "https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt",
         "https://blocklistproject.github.io/Lists/alt-version/phishing-nl.txt",
         "https://blocklistproject.github.io/Lists/alt-version/malware-nl.txt", 
         "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware",
