@@ -88,6 +88,7 @@ def generate_combined_filter_file():
         "https://phishing.army/download/phishing_army_blocklist_extended.txt",
         "https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt",
         "https://blocklistproject.github.io/Lists/alt-version/malware-nl.txt", 
+        "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts",
         "https://raw.githubusercontent.com/iam-py-test/my_filters_001/main/Alternative%20list%20formats/antimalware_domains.txt",
         "https://raw.githubusercontent.com/olbat/ut1-blacklists/master/blacklists/malware/domains",
         "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware",
