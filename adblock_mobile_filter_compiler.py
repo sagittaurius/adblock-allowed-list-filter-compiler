@@ -48,7 +48,7 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
         adblock_rules = parse_filter_content(content)
         for rule in adblock_rules:
             domain = rule[2:-1]  # Remove '||' and '^'
-            base_domain = '.'.join(domain.split('.')[-3:])  # Get the base domain (last three parts)
+            base_domain = '.'.join(domain.rsplit('.', 2)[-3:])  # Get the base domain (last three parts)
             if rule not in adblock_rules_set and base_domain not in base_domain_set:
                 adblock_rules_set.add(rule)
                 base_domain_set.add(base_domain)
@@ -66,8 +66,8 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
 def generate_filter_header(domain_count: int, duplicates_removed: int, redundant_rules_removed: int) -> str:
     """Generates header with specific domain count, removed duplicates, and compressed domains information."""
     date_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S %Z')  # Includes date, time, and timezone
-    return f"""# Title: sagittaurius's Blocklist
-# Description: Python script that generates adblock filters by combining blocklists, host files, and domain lists.
+    return f"""# Title: sagittaurius's Malware Blocklist
+# Description: Python script that generates malware filters by combining blocklists, host files, and domain lists.
 # Last Modified: {date_time}
 # Expires: 1 day
 # Domain Count: {domain_count}
@@ -81,12 +81,13 @@ def process_filter_content_with_allowlist_domains(filter_content: List[str], all
     filtered_content = filter_content_by_allowlist_domains(filter_content, set(allowlist_domains))
     return filtered_content
 
+
 def generate_combined_filter_file():
     """Main function to fetch blocklists and generate a combined filter."""
     blocklist_urls = [
-        "https://blocklistproject.github.io/Lists/alt-version/malware-nl.txt",
-        "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/malware",
-        "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware"
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt",
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/multi.txt",
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.medium.txt"
     ]
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
 
