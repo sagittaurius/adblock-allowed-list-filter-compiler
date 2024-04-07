@@ -85,7 +85,6 @@ def process_filter_content_with_allowlist_domains(filter_content: List[str], all
 def generate_combined_filter_file():
     """Main function to fetch blocklists and generate a combined filter."""
     blocklist_urls = [
-        "https://hblock.molinero.dev/hosts_adblock.txt",
         "https://raw.githubusercontent.com/sjhgvr/oisd/main/abp_big.txt",
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt",
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/multi.txt",
