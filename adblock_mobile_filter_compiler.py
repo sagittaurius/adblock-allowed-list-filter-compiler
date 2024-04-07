@@ -66,7 +66,7 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
 def generate_filter_header(domain_count: int, duplicates_removed: int, redundant_rules_removed: int) -> str:
     """Generates header with specific domain count, removed duplicates, and compressed domains information."""
     date_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S %Z')  # Includes date, time, and timezone
-    return f"""# Title: sagittaurius's Malware Blocklist
+    return f"""# Title: sagittaurius's Malware Mobile Blocklist
 # Description: Python script that generates malware filters by combining blocklists, host files, and domain lists.
 # Last Modified: {date_time}
 # Expires: 1 day
