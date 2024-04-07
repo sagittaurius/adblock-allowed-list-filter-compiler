@@ -1,8 +1,8 @@
 name: AdBlock Mobile Filter Compiler
 
 on:
-#  schedule:
-  #  - cron: '0 18 * * *' # Runs every day at 1 PM EST (6 PM UTC)
+  schedule:
+   - cron: '0 18 * * *' # Runs every day at 1 PM EST (6 PM UTC)
   workflow_dispatch:
 
 jobs:
