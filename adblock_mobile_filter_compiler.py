@@ -66,7 +66,7 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
 def generate_filter_header(domain_count: int, duplicates_removed: int, redundant_rules_removed: int) -> str:
     """Generates header with specific domain count, removed duplicates, and compressed domains information."""
     date_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S %Z')  # Includes date, time, and timezone
-    return f"""# Title: sagittaurius's Malware Mobile Blocklist
+    return f"""# Title: sagittaurius's Ad Blocklist
 # Description: Python script that generates malware filters by combining blocklists, host files, and domain lists.
 # Last Modified: {date_time}
 # Expires: 1 day
@@ -87,7 +87,8 @@ def generate_combined_filter_file():
     blocklist_urls = [
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt",
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.medium.txt"
+        "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-domains.txt",
+        "https://raw.githubusercontent.com/sjhgvr/oisd/main/abp_big.txt"
     ]
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
 
