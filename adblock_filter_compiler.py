@@ -48,7 +48,7 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
         adblock_rules = parse_filter_content(content)
         for rule in adblock_rules:
             domain = rule[2:-1]  # Remove '||' and '^'
-            base_domain = '.'.join(domain.rsplit('.', 2)[-3:])  # Get the base domain (last three parts)
+            base_domain = '.'.join(domain.rsplit('.')[-2:])  # Get the base domain (last three parts)
             if rule not in adblock_rules_set and base_domain not in base_domain_set:
                 adblock_rules_set.add(rule)
                 base_domain_set.add(base_domain)
@@ -92,7 +92,6 @@ def generate_combined_filter_file():
         "https://raw.githubusercontent.com/olbat/ut1-blacklists/master/blacklists/malware/domains",
         "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware",
         "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/malware",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt",
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt"
     ]
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
