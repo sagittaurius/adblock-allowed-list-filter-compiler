@@ -87,6 +87,7 @@ def generate_combined_filter_file():
     blocklist_urls = [
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt",
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt",
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt",
         "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-domains.txt",
         "https://raw.githubusercontent.com/sjhgvr/oisd/main/abp_big.txt"
     ]
