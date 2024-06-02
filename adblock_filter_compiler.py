@@ -66,8 +66,8 @@ def generate_combined_filter_content(filter_content: List[str]) -> Tuple[str, in
 def generate_filter_header(domain_count: int, duplicates_removed: int, redundant_rules_removed: int) -> str:
     """Generates header with specific domain count, removed duplicates, and compressed domains information."""
     date_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S %Z')  # Includes date, time, and timezone
-    return f"""# Title: sagittaurius's Malware Blocklist
-# Description: Python script that generates malware filters by combining blocklists, host files, and domain lists.
+    return f"""# Title: sagittaurius's Various Blocklist
+# Description: Python script that generates filters by combining blocklists, host files, and domain lists.
 # Last Modified: {date_time}
 # Expires: 1 day
 # Domain Count: {domain_count}
@@ -92,7 +92,8 @@ def generate_combined_filter_file():
         "https://raw.githubusercontent.com/olbat/ut1-blacklists/master/blacklists/malware/domains",
         "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware",
         "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/malware",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt"
+        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/gambling.txt,
+        "https://raw.githubusercontent.com/bigdargon/hostsVN/master/extensions/gambling/filter.txt"
     ]
     allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
 
