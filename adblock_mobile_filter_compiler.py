@@ -86,10 +86,9 @@ def generate_combined_filter_file():
     """Main function to fetch blocklists and generate a combined filter."""
     blocklist_urls = [
         "https://raw.githubusercontent.com/sjhgvr/oisd/main/abp_big.txt",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/multi.txt",
         "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.medium.txt"
     ]
-    allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
+    allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/allow_list.txt"]
 
     filter_content = [requests.get(url).text for url in blocklist_urls]
     allowlist_domains = requests.get(allowlist_urls[0]).text.split('\n')
