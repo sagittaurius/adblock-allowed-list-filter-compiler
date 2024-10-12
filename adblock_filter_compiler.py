@@ -85,18 +85,9 @@ def process_filter_content_with_allowlist_domains(filter_content: List[str], all
 def generate_combined_filter_file():
     """Main function to fetch blocklists and generate a combined filter."""
     blocklist_urls = [
-        "https://phishing.army/download/phishing_army_blocklist_extended.txt",
-        "https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt",
-        "https://blocklistproject.github.io/Lists/alt-version/malware-nl.txt", 
-        "https://raw.githubusercontent.com/iam-py-test/my_filters_001/main/Alternative%20list%20formats/antimalware_domains.txt",
-        "https://raw.githubusercontent.com/olbat/ut1-blacklists/master/blacklists/malware/domains",
-        "https://raw.githubusercontent.com/ShadowWhisperer/BlockLists/master/Lists/Malware",
-        "https://raw.githubusercontent.com/RPiList/specials/master/Blocklisten/malware",
-        "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts",
-        "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/gambling.txt",
-        "https://raw.githubusercontent.com/bigdargon/hostsVN/master/extensions/gambling/filter.txt"
+        "https://abpvn.com/android/abpvn.txt"
     ]
-    allowlist_urls = ["https://raw.githubusercontent.com/sagittaurius/main/main/whitelist"]
+    allowlist_urls = ["https://raw.githubusercontent.com/easylist/easylist/refs/heads/master/easylist/easylist_adservers.txt"]
 
     filter_content = [requests.get(url).text for url in blocklist_urls]
     allowlist_domains = requests.get(allowlist_urls[0]).text.split('\n')
